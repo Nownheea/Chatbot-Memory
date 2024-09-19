@@ -8,7 +8,7 @@ import os
 st.set_page_config(page_title="대화 기억 챗봇", page_icon="🤖")
 
 # OpenAI API 키 설정 (안전한 방법으로 관리해야 합니다)
-os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+os.environ["OPENAI_API_KEY"] = st.secrets["openai"]["api_key"]
 
 # 제목
 st.title("대화 기억 챗봇 🤖")
