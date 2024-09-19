@@ -1,11 +1,3 @@
 streamlit
-OpenAI  
-ConversationChain  
-ChatPromptTemplate  
-ConversationBufferMemory 
-RunnablePassthrough 
-
-getpass
-ConversationChain
-StrOutputParser
-ChatOpenAI
+langchain 
+langchain_openai
