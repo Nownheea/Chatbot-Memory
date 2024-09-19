@@ -1,4 +1,4 @@
-import streamlit as st
+
 
 # 프롬프트 템플릿 생성  
 prompt_template = ChatPromptTemplate.from_messages([  
