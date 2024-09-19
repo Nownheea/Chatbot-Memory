@@ -4,3 +4,8 @@ ConversationChain
 ChatPromptTemplate  
 ConversationBufferMemory 
 RunnablePassthrough 
+
+getpass
+ConversationChain
+StrOutputParser
+ChatOpenAI
