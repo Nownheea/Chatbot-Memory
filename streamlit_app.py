@@ -7,7 +7,9 @@ from langchain_core.output_parsers import StrOutputParser
 from langchain_openai import ChatOpenAI
 
 # OpenAI API 키 설정
-os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+# os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
+
+openai.api_key = st.secrets["openai"]["api_key"]
 
 # 프롬프트 템플릿 생성
 prompt_template = ChatPromptTemplate.from_messages([
