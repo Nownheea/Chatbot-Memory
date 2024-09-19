@@ -5,6 +5,18 @@ from langchain_core import ConversationChain, RunnablePassthrough, StrOutputPars
 from langchain_openai import ChatOpenAI  
 
 
+import os
+from getpass import getpass
+from langchain.memory import ConversationBufferMemory
+from langchain.llms import OpenAI
+from langchain.chains import ConversationChain
+
+from langchain_core.runnables import RunnablePassthrough
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_openai import ChatOpenAI
+
+
 # 프롬프트 템플릿 생성  
 prompt_template = ChatPromptTemplate.from_messages([  
     ("system",   
