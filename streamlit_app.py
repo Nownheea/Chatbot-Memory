@@ -1,48 +1,67 @@
 import streamlit as st
+import os
 from langchain.memory import ConversationBufferMemory
 from langchain.chains import ConversationChain
-from langchain.llms import OpenAI
-import os
+from langchain_core.prompts import ChatPromptTemplate
+from langchain_core.output_parsers import StrOutputParser
+from langchain_openai import ChatOpenAI
 
 # Streamlit 페이지 설정
-st.set_page_config(page_title="대화 기억 챗봇", page_icon="🤖")
+st.set_page_config(page_title="AI 채팅봇", page_icon="🤖")
 
-# OpenAI API 키 설정 (안전한 방법으로 관리해야 합니다)
-openai.api_key = st.secrets["openai"]["api_key"]
+# OpenAI API 키 설정 (보안을 위해 환경 변수나 Streamlit의 secrets 관리를 사용하는 것이 좋습니다)
+os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
-# 제목
-st.title("대화 기억 챗봇 🤖")
+# 프롬프트 템플릿 생성
+prompt_template = ChatPromptTemplate.from_messages([
+    ("system",
+     "안녕하세요. 친구처럼 대화하고 이모티콘을 사용해 주세요. 😊"
+     "잘 모르겠는 내용에 대해서는 추측하지 말고 '모르겠습니다'라고 대답해 주세요."
+     "밝고 긍정적인 태도로 답변해 주세요"),
+    ("human", "{input}")
+])
 
-# 세션 상태 초기화
-if "memory" not in st.session_state:
-    st.session_state.memory = ConversationBufferMemory()
-    st.session_state.chain = ConversationChain(
-        llm=OpenAI(temperature=0.7),
-        memory=st.session_state.memory,
-        verbose=True
-    )
+# LangChain 체인 생성
+memory = ConversationBufferMemory()
+conversation = ConversationChain(
+    llm=ChatOpenAI(),
+    memory=memory,
+    prompt=prompt_template,
+    verbose=False
+)
 
-# 채팅 기록 표시
-st.subheader("대화 기록")
-for message in st.session_state.memory.chat_memory.messages:
-    if message.type == 'human':
-        st.text_input("You:", value=message.content, key=f"human_{message.content[:10]}", disabled=True)
-    else:
-        st.text_area("AI:", value=message.content, key=f"ai_{message.content[:10]}", disabled=True)
+# Streamlit UI
+st.title("AI 채팅봇과 대화하기 🤖")
+
+# 세션 상태로 대화 기록 관리
+if "messages" not in st.session_state:
+    st.session_state.messages = []
 
 # 사용자 입력
-user_input = st.text_input("메시지를 입력하세요:", key="user_input")
+user_input = st.text_input("메시지를 입력하세요:")
 
-# 전송 버튼
-if st.button("전송"):
-    if user_input:
-        # AI 응답 생성
-        response = st.session_state.chain.predict(input=user_input)
-        
-        # 화면 갱신
-        st.experimental_rerun()
+if user_input:
+    # 사용자 메시지 추가
+    st.session_state.messages.append({"role": "user", "content": user_input})
+    
+    # AI 응답 생성
+    response = conversation.predict(input=user_input)
+    
+    # AI 응답 추가
+    st.session_state.messages.append({"role": "assistant", "content": response})
+
+# 대화 기록 표시
+for message in st.session_state.messages:
+    if message["role"] == "user":
+        st.text_area("You:", value=message["content"], height=50, disabled=True)
+    else:
+        st.text_area("AI:", value=message["content"], height=100, disabled=True)
 
 # 대화 초기화 버튼
+if st.button("대화 초기화"):
+    st.session_state.messages = []
+    memory.clear()
+    st.success("대화가 초기화되었습니다.")
 if st.button("대화 초기화"):
     st.session_state.memory.clear()
     st.success("대화 기록이 초기화되었습니다.")
