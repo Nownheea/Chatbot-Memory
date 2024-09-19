@@ -12,6 +12,9 @@ st.set_page_config(page_title="AI 채팅봇", page_icon="🤖")
 # OpenAI API 키 설정 (보안을 위해 환경 변수나 Streamlit의 secrets 관리를 사용하는 것이 좋습니다)
 os.environ["OPENAI_API_KEY"] = st.secrets["OPENAI_API_KEY"]
 
+
+st.secrets["openai"]["api_key"]
+
 # 프롬프트 템플릿 생성
 prompt_template = ChatPromptTemplate.from_messages([
     ("system",
