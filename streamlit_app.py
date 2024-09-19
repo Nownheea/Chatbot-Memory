@@ -1,3 +1,8 @@
+import streamlit as st  
+from langchain_prompts import ChatPromptTemplate  
+from langchain_memory import ConversationBufferMemory  
+from langchain_core import ConversationChain, RunnablePassthrough, StrOutputParser  
+from langchain_openai import ChatOpenAI  
 
 
 # 프롬프트 템플릿 생성  
