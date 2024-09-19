@@ -2,8 +2,3 @@ streamlit
 langchain 
 langchain_openai
 
-ConversationBufferMemory
-ConversationChain
-ChatPromptTemplate
-StrOutputParser
-ChatOpenAI
